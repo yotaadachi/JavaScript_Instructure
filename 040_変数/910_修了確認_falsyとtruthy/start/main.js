@@ -23,7 +23,9 @@
 let a = 1;
 
 function fn(num) {
-    num = num || -1;
+    if(num === undefined || num === null) {
+        num = -1;
+    }
     console.log(num);
 }
 fn(a);
@@ -39,3 +41,10 @@ fn(a);
  * greeting("Bob"); -> 出力結果："hello, Bob"
  *
  */
+
+function greeting(name, greet = 'hello') {
+    console.log(`"${greet},${name}"`);
+}
+
+greeting('Bob');
+greeting('Bob', 'hi');
