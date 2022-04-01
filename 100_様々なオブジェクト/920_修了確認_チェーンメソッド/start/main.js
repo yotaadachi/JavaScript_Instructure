@@ -26,6 +26,41 @@ class IteratableObject {
 		return this;
 	}
 
+	set(key, value) {
+		this[key] = value;
+		return this;
+	}
+
+	forEach(callback) {
+		for(let [k, v] of this) {
+			callback(v, k, this);
+		}
+	}
+
+	map(callback) {
+		const newInstance = new IteratableObject();
+		for(let [k, v] of this) {
+			newInstance[k] = callback(v, k, this);
+		}
+		return newInstance;
+	}
+
+	filter(callback) {
+		const newInstance = new IteratableObject();
+		for(let [k, v] of this) {
+			if(callback(v, k, this)) {
+				newInstance[k] = v;
+			}
+		}
+		return newInstance;
+	}
+
+	*[Symbol.iterator]() {
+		for(let key in this) {
+			yield [key, this[key]];
+		}
+	}
+
 }
 
 function prefix(v, i, obj) {
@@ -37,6 +72,13 @@ const original = new IteratableObject({
 	key2: 'value2',
 	key3: 'value3',
 });
+
+original.forEach(v => {
+	console.log(v);
+})
+// for(let [k, v] of original) {
+// 	console.log(k, v);
+// }
 
 const result = original
 	.map(prefix)
