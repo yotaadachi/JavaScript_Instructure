@@ -19,6 +19,47 @@ class MyArray extends Array {
 		console.log(`%c ${label}`, 'color: blue; font-weight: 600;', this);
 		return this;
 	}
+
+	push(val) {
+		super.push(val);
+		return this;
+	}
+
+	forEach(callback) {
+		for(let i = 0; i < this.length; i++) {
+			callback(this[i], i, this)
+		}
+	}
+
+	map(callback) {
+		const newInstance = new MyArray();
+		for(let i = 0; i < this.length; i++) {
+			const result = callback(this[i], i, this);
+			newInstance.push(result);
+		}
+		return newInstance;
+	}
+
+	reduce(callback, accu) {
+		const tmpArry = [...this];
+		if(accu === undefined) {
+			accu = tmpArry.shift();
+		}
+		for(let i = 0; i < tmpArry.length; i++) {
+			accu = callback(accu, tmpArry[i]);
+		}
+		return accu;
+	}
+
+	filter(callback) {
+		const newInstance = new MyArray();
+		for(let i = 0; i < this.length; i++) {
+			if(callback(this[i], i, this)) {
+				newInstance.push(this[i]);
+			}
+		}
+		return newInstance;
+	}
 }
 
 function double(v, i, obj) {
@@ -28,14 +69,23 @@ function double(v, i, obj) {
 const original = new MyArray(1, 2, 3, 4);
 
 const result = original
-	.map(double)
-	.push(5)
-	.filter(function (v, i) {
-		return v > 2;
-	})
-	.reduce(function(accu, curr) {
-		return accu + curr;
-	})
+.map(double)
+.push(5)
+.filter(function(v, i) {
+	return v > 2;
+})
+.print('place1')
+.reduce(function(accu, curr) {
+	return accu + curr;
+}, 0)
+	// .map(double)
+	// .push(5)
+	// .filter(function (v, i) {
+	// 	return v > 2;
+	// })
+	// .reduce(function(accu, curr) {
+	// 	return accu + curr;
+	// })
 
 console.log('%coriginal', 'color: blue; font-weight: bold;', original);
 console.log('%cresult', 'color: red; font-weight: bold;', result);
